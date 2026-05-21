@@ -16,27 +16,22 @@ BUILDDIR = output
 #          They live in the current directory (no subfolder prefix needed here).
 #          You will not use SRCS in Part A — it is here so Part B can derive
 #          OBJS from it with a substitution reference.
-SRCS =
+SRCS = utils.c math.c
+
+# TODO B1: Derive OBJS from SRCS using a substitution reference.
+#          Replace the .c suffix with a path inside $(BUILDDIR)/.
+#          Hint: $(SRCS:%.c=$(BUILDDIR)/%.o)
+OBJS = $(SRCS:%.c=$(BUILDDIR)/%.o)
+
 
 # TODO A2: Write the default target "all" that depends on output/utils.o
 #          and output/math.o (list them explicitly for now).
 #
-# YOUR RULE HERE
-
+all: $(BUILDDIR)/utils.o $(BUILDDIR)/math.o
+all: $(OBJS)
 
 $(BUILDDIR):
 	mkdir -p $@
-
-# TODO A3: Write an explicit rule for output/utils.o from utils.c
-#          (same pattern as Exercise 2, TODO 2)
-#
-# YOUR RULE HERE
-
-
-# TODO A4: Write an explicit rule for output/math.o from math.c
-#
-# YOUR RULE HERE
-
 
 .PHONY: all clean
 
@@ -48,11 +43,6 @@ clean:
 # Having A3/A4 and the pattern rule active at the same time causes "overriding
 # recipe" warnings from Make.
 
-# TODO B1: Derive OBJS from SRCS using a substitution reference.
-#          Replace the .c suffix with a path inside $(BUILDDIR)/.
-#          Hint: $(SRCS:%.c=$(BUILDDIR)/%.o)
-OBJS =
-
 # TODO B2: Do these three things together, then run make:
 #          1. Delete the explicit rules A3 and A4 above.
 #          2. Write the pattern rule below.
@@ -61,4 +51,7 @@ OBJS =
 #          Form:   $(OBJS): $(BUILDDIR)/%.o : %.c | $(BUILDDIR)
 #                      $(CC) $(CFLAGS) -c $< -o $@
 #
-# YOUR RULE HERE
+
+$(OBJS): $(BUILDDIR)/%.o : %.c | $(BUILDDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
